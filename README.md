@@ -27,11 +27,11 @@ To publish messages to each subscribed node, use for example:
 ```java
 Message message = Message.Factory.userMessage("Hello, world!");
 queue.publish(message);
-``
+```
 If you want to stop receiving messages, you need to unsubscribe:
 ```java
 queue.unsubscribe();
-``
+```
 To close the queue and clean up resources, use:
 ```java
 queue.close();
