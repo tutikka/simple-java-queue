@@ -11,7 +11,12 @@ import com.tt.simplejavaqueue.QueueListener;
 public class QueueClient implements QueueListener {
 
 	private QueueClient() throws IOException {
-		Queue queue = new Queue.Builder().address("224.0.0.0").port(9999).maxMessageLength(8192).queueListener(this).build();		
+		Queue queue = new Queue.Builder()
+			.address("224.0.0.0")
+			.port(9999)
+			.maxMessageLength(8192)
+			.queueListener(this)
+			.build();		
 		BufferedReader in;
 		try {
 			in = new BufferedReader(new InputStreamReader(System.in));
