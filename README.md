@@ -18,11 +18,11 @@ Queue queue = new Queue.Builder()
 	.maxMessageLength(8192)
 	.queueListener(this)
 	.build();	
-``
+```
 To receive messages, you need to subscribe to the queue:
 ```java
 queue.subscribe();
-``
+```
 To publish messages to each subscribed node, use for example:
 ```java
 Message message = Message.Factory.userMessage("Hello, world!");
