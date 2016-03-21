@@ -35,6 +35,7 @@ queue.unsubscribe();
 To close the queue and clean up resources, use:
 ```java
 queue.close();
+```
 
 ## Test Client
 A full command line example application is provided in `com.tt.simplejavaqueue.test.QueueClient`.
