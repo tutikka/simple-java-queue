@@ -7,19 +7,19 @@ public class Node implements Serializable {
 
 	public static final long serialVersionUID = 1L;
 	
+	// The address of the node (hostname, IP address, etc.)
 	private String address;
 	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{ address: ");
-		sb.append(address);
-		sb.append(" }");
-		return (sb.toString());
-	}
-	
+	/**
+	 * Class that can be used to obtain new node instances.
+	 */
 	public static class Factory {
 		
+		/**
+		 * Return a new node representing the current host.
+		 * 
+		 * @return The new node
+		 */
 		public static Node fromCurrentHost() {
 			Node node = new Node();
 			try {
@@ -32,15 +32,30 @@ public class Node implements Serializable {
 		
 	}
 	
-	private Node() {
-	}
-
+	/*** getters and setters ***/
+	
 	public String getAddress() {
 		return address;
 	}
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	/*** override ***/
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{ address: ");
+		sb.append(address);
+		sb.append(" }");
+		return (sb.toString());
+	}
+	
+	/*** private ***/
+	
+	private Node() {
 	}
 	
 }

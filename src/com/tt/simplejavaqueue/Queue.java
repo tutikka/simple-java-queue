@@ -32,6 +32,9 @@ public class Queue {
 	
 	private ExecutorService executorService;
 	
+	/**
+	 * Class that can be used to obtain new queue instances.
+	 */
 	public static class Builder {
 		
 		private static final Logger logger = LoggerFactory.getLogger(Builder.class);
@@ -83,6 +86,57 @@ public class Queue {
 		
 	}
 	
+	/**
+	 * Clean up resources (multicast socket and listener).
+	 */
+	public void close() {
+		logger.trace("close");
+		multicastSocket.close();
+		executorService.shutdown();
+	}
+	
+	/**
+	 * Subscribe to the queue to start receiving messages.
+	 */
+	public void subscribe() {
+		logger.trace("subscribe");
+		try {
+			sendMessage(Message.Factory.systemNodePreSubscribe("node is about to subscribe"));
+			multicastSocket.joinGroup(InetAddress.getByName(address));
+			sendMessage(Message.Factory.systemNodePostSubscribe("node has subscribed"));
+			logger.info("subscribed to queue at " + address);
+		} catch (Exception e) {
+			logger.error("error subscribing to queue: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Unsubscribe from the queue to stop receiving messages.
+	 */
+	public void unsubscribe() {
+		logger.trace("unsubscribe");
+		try {
+			sendMessage(Message.Factory.systemNodePreUnsubscribe("node is about to unsubscribe"));
+			multicastSocket.leaveGroup(InetAddress.getByName(address));
+			sendMessage(Message.Factory.systemNodePostUnsubscribe("node has unsubscribed"));
+			logger.info("unsubscribed from queue at address " + address);
+		} catch (Exception e) {
+			logger.error("error unsubscribing from queue: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Publish a message to the queue (received by all subscribers).
+	 * 
+	 * @param message The message to publish
+	 */
+	public void publish(Message message) {
+		logger.trace("publish");
+		sendMessage(message);
+	}
+	
+	/*** private ***/
+	
 	private Queue(String address, int port, long maxMessageLength, Set<QueueListener> queueListeners) throws IOException {
 		logger.trace("Queue");
 		logger.debug("address = " + address);
@@ -97,41 +151,6 @@ public class Queue {
 		executorService = Executors.newSingleThreadScheduledExecutor();
 		multicastSocketListener = new MulticastSocketListener(multicastSocket, maxMessageLength, queueListeners);
 		executorService.submit(multicastSocketListener);
-	}
-	
-	public void close() {
-		logger.trace("close");
-		multicastSocket.close();
-		executorService.shutdown();
-	}
-	
-	public void subscribe() {
-		logger.trace("subscribe");
-		try {
-			sendMessage(Message.Factory.systemNodePreSubscribe("node is about to subscribe"));
-			multicastSocket.joinGroup(InetAddress.getByName(address));
-			sendMessage(Message.Factory.systemNodePostSubscribe("node has subscribed"));
-			logger.info("subscribed to queue at " + address);
-		} catch (Exception e) {
-			logger.error("error subscribing to queue: " + e.getMessage());
-		}
-	}
-	
-	public void unsubscribe() {
-		logger.trace("unsubscribe");
-		try {
-			sendMessage(Message.Factory.systemNodePreUnsubscribe("node is about to unsubscribe"));
-			multicastSocket.leaveGroup(InetAddress.getByName(address));
-			sendMessage(Message.Factory.systemNodePostUnsubscribe("node has unsubscribed"));
-			logger.info("unsubscribed from queue at address " + address);
-		} catch (Exception e) {
-			logger.error("error unsubscribing from queue: " + e.getMessage());
-		}
-	}
-	
-	public void publish(Message message) {
-		logger.trace("publish");
-		sendMessage(message);
 	}
 	
 	private void sendMessage(Message message) {
