@@ -3,6 +3,11 @@ package com.tt.simplejavaqueue;
 import java.io.Serializable;
 import java.net.InetAddress;
 
+/**
+ * Class representing a subscriber to the queue.
+ * 
+ * @author Tuomas Tikka
+ */
 public class Node implements Serializable {
 
 	public static final long serialVersionUID = 1L;

@@ -10,16 +10,31 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class responsible for listening to and receiving messages via the multicast socket.
+ * 
+ * @author Tuomas Tikka
+ */
 public class MulticastSocketListener implements Runnable {
 
 	private static final Logger logger = LoggerFactory.getLogger(MulticastSocketListener.class);
 	
+	// the multicast socket
 	private MulticastSocket multicastSocket;
 	
+	// maximum acceptable message length
 	private long maxMessageLength;
 	
+	// set of registered listeners for receiving messages
 	private Set<QueueListener> queueListeners;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param multicastSocket	The multicast socket
+	 * @param maxMessageLength	The maximum acceptable message length
+	 * @param queueListeners	The set of registered listeners for receiving messages
+	 */
 	public MulticastSocketListener(MulticastSocket multicastSocket, long maxMessageLength, Set<QueueListener> queueListeners) {
 		logger.trace("init");
 		this.multicastSocket = multicastSocket;

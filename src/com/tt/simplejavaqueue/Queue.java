@@ -14,6 +14,11 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class representing the queue.
+ * 
+ * @author Tuomas Tikka
+ */
 public class Queue {
 
 	private static final Logger logger = LoggerFactory.getLogger(Queue.class);
